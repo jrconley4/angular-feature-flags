@@ -36,7 +36,14 @@ angular
       replace: true,
     };
   })
-  .run(function (featureFlags, $http) {
+  /*.run(function (featureFlags, $http) {
     featureFlags.setEnvironment("prod");
     featureFlags.set($http.get("../data/flags.json"));
+  });*/
+  .run(function (featureFlags, $http) {
+    debugger;
+    featureFlags.setEnvironment("prod");
+    featureFlags.set($http.get("https://localhost:5001/api/FeatureFlags/"));
+    let flags = featureFlags.get();
+    console.log(flags);
   });

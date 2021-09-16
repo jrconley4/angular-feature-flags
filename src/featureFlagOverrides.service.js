@@ -17,8 +17,8 @@ angular.module('feature-flags').service('featureFlagOverrides', function($rootEl
       return keyPrefix + flagName;
     },
 
-    isPrefixedKey = function(key) {
-      return key.indexOf(keyPrefix) === 0;
+    isPrefixedKey = function(name) {
+      return name.indexOf(keyPrefix) === 0;
     },
 
     getPrefix = function() {
@@ -55,8 +55,8 @@ angular.module('feature-flags').service('featureFlagOverrides', function($rootEl
     };
 
   return {
-    isPresent: function(key) {
-      var value = get(key);
+    isPresent: function(name) {
+      var value = get(name);
       return typeof value !== 'undefined' && value !== null;
     },
     setEnvironment: setEnvironment,
@@ -71,11 +71,11 @@ angular.module('feature-flags').service('featureFlagOverrides', function($rootEl
     },
     remove: remove,
     reset: function() {
-      var key;
+      var name;
       if (localStorageAvailable) {
-        for (key in localStorage) {
-          if (isPrefixedKey(key)) {
-            localStorage.removeItem(key);
+        for (name in localStorage) {
+          if (isPrefixedKey(name)) {
+            localStorage.removeItem(name);
           }
         }
       }

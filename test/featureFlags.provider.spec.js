@@ -4,6 +4,7 @@
   var module = angular.mock.module,
     inject = angular.mock.inject;
 
+    /*
   describe('Service: featureFlags', function() {
     var featureFlags,
       featureFlagOverrides,
@@ -81,8 +82,8 @@
 
     describe('when I manually provide an array of flags', function() {
       var flags = [
-          { key: 'FLAG_KEY' },
-          { key: 'FLAG_KEY_2' }
+          { name: 'FLAG_KEY' },
+          { name: 'FLAG_KEY_2' }
         ],
         promise;
 
@@ -104,35 +105,35 @@
 
     describe('when I enable a feature flag override in the beta environment', function() {
       var flag = {
-        key: 'FLAG_KEY',
-        environments: { beta: false, prod: false }
+        name: 'FLAG_KEY',
+        //environments: { beta: false, prod: false }
       };
 
       beforeEach(function() {
         spyOn(featureFlagOverrides, 'set');
         featureFlags.setEnvironment('beta');
-        featureFlags.enable(flag.key);
+        featureFlags.enable(flag.name);
       });
 
       it('should set the flag with the correct name and value', function() {
-        expect(featureFlagOverrides.set).toHaveBeenCalledWith(flag.key, true);
+        expect(featureFlagOverrides.set).toHaveBeenCalledWith(flag.name, true);
       });
     });
 
     describe('when I disable a feature flag override in the beta environment', function() {
       var flag = {
         key: 'FLAG_KEY',
-        environments: { beta: true, prod: true }
+        //environments: { beta: true, prod: true }
       };
 
       beforeEach(function() {
         spyOn(featureFlagOverrides, 'set');
         featureFlags.setEnvironment('beta');
-        featureFlags.disable(flag.key);
+        featureFlags.disable(flag.name);
       });
 
       it('should set the flag with the correct name and value', function() {
-        expect(featureFlagOverrides.set).toHaveBeenCalledWith(flag.key, false);
+        expect(featureFlagOverrides.set).toHaveBeenCalledWith(flag.name, false);
       });
     });
 
@@ -140,7 +141,7 @@
       var originalFlagValue = true,
         flag = {
           key: 'FLAG_KEY',
-          environments: { beta: originalFlagValue, prod: true }
+          //environments: { beta: originalFlagValue, prod: true }
         };
 
       beforeEach(function() {
@@ -150,19 +151,19 @@
         featureFlags.setEnvironment('beta');
 
         spyOn(featureFlagOverrides, 'set');
-        featureFlags.disable(flag.key);
+        featureFlags.disable(flag.name);
 
         spyOn(featureFlagOverrides, 'remove');
-        featureFlags.reset(flag.key);
+        featureFlags.reset(flag.name);
       });
 
       it('should remove the flag', function() {
-        expect(featureFlagOverrides.remove).toHaveBeenCalledWith(flag.key);
+        expect(featureFlagOverrides.remove).toHaveBeenCalledWith(flag.name);
       });
     });
 
     describe('when I check if there is an local override', function() {
-      var flag = { key: 'FLAG_KEY' };
+      var flag = { name: 'FLAG_KEY' };
 
       describe('if there is', function() {
         beforeEach(function() {
@@ -170,7 +171,7 @@
         });
 
         it('should return true when there is', function() {
-          expect(featureFlags.isOverridden(flag.key)).toBe(true);
+          expect(featureFlags.isOverridden(flag.name)).toBe(true);
         });
       });
 
@@ -180,57 +181,58 @@
         });
 
         it('should return true when there is', function() {
-          expect(featureFlags.isOverridden(flag.key)).toBe(false);
+          expect(featureFlags.isOverridden(flag.name)).toBe(false);
         });
       });
     });
+
 
     describe('when I check a feature flag default state', function() {
       var today = new Date();
       var future = new Date();
       var onFlag = {
-        key: 'FLAG_KEY_ON',
-        environments: { beta: true }
+        name: 'FLAG_KEY_ON',
+        //environments: { beta: true }
       };
       var offFlag = {
-        key: 'FLAG_KEY_OFF',
-        environments: { beta: false }
+        name: 'FLAG_KEY_OFF',
+        //environments: { beta: false }
       };
       var onFlagOverridden = {
-        key: 'FLAG_KEY_ON_OVERRIDDEN',
-        environments: { beta: true }
+        name: 'FLAG_KEY_ON_OVERRIDDEN',
+        //environments: { beta: true }
       };
       var offFlagOverridden = {
-        key: 'FLAG_KEY_OFF_OVERRRIDDEN',
-        environments: { beta: false }
+        name: 'FLAG_KEY_OFF_OVERRRIDDEN',
+        //environments: { beta: false }
       };
       var undefinedFlag = {
         key: 'FLAG_UNDEFINED',
         environments: { beta: false }
       };
       var undefinedFlagOverridden = {
-        key: 'FLAG_UNDEFINED_OVERRIDDEN',
-        environments: { beta: false }
+        name: 'FLAG_UNDEFINED_OVERRIDDEN',
+        //environments: { beta: false }
       };
       var invalidInstanceFlag = {
-        key: 'FLAG_KEY_ON_INSTANCE_INVALID',
+        name: 'FLAG_KEY_ON_INSTANCE_INVALID',
         instances: [543],
-        environments: { beta: true }
+        //environments: { beta: true }
       };
       var validInstanceFlag = {
-        key: 'FLAG_KEY_ON_INSTANCE_VALID',
+        name: 'FLAG_KEY_ON_INSTANCE_VALID',
         instances: [218, 517],
-        environments: { beta: true }
+        //environments: { beta: true }
       };
       var onFlagThatHasExpired = {
-        key: 'FLAG_KEY_EXPIRED',
-        expires: '2017-08-30T00:05:54Z',
-        environments: { beta: true }
+        name: 'FLAG_KEY_EXPIRED',
+        //expires: '2017-08-30T00:05:54Z',
+        //environments: { beta: true }
       };
       var onFlagFutureExpiry = {
         key: 'FLAG_KEY_FUTURE_EXPIRY',
-        expires: future.setDate(today.getHours() + 1),
-        environments: { beta: true }
+        //expires: future.setDate(today.getHours() + 1),
+        //environments: { beta: true }
       };
 
       beforeEach(function(done) {
@@ -254,15 +256,15 @@
       });
 
       it('should report feature is on by default when it is', function() {
-        expect(featureFlags.isOnByDefault(onFlag.key)).toBe(true);
+        expect(featureFlags.isOnByDefault(onflag.name)).toBe(true);
       });
 
       it('should report feature is off by default when it is', function() {
-        expect(featureFlags.isOnByDefault(offFlag.key)).toBe(false);
+        expect(featureFlags.isOnByDefault(offflag.name)).toBe(false);
       });
 
       it('should return undefined if the key was not loaded by set()', function() {
-        expect(typeof featureFlags.isOnByDefault(undefinedFlag.key)).toBe('undefined');
+        expect(typeof featureFlags.isOnByDefault(undefinedflag.name)).toBe('undefined');
       });
 
       it('should report feature is on by default when it is even when disabled', function() {
@@ -278,11 +280,11 @@
       });
 
       it('should report feature is off by default when provided instances for flag do not match current instance', function() {
-        expect(featureFlags.isOnByDefault(invalidInstanceFlag.key)).toBe(false);
+        expect(featureFlags.isOnByDefault(invalidInstanceflag.name)).toBe(false);
       });
 
       it('should report feature is on by default when provided instances for flag match current instance', function() {
-        expect(featureFlags.isOnByDefault(validInstanceFlag.key)).toBe(true);
+        expect(featureFlags.isOnByDefault(validInstanceflag.name)).toBe(true);
       });
 
       it('should report feature is off by default when default is on but has expired', function() {
@@ -320,7 +322,7 @@
           });
 
           it('should report the feature as being on', function() {
-            expect(featureFlags.isOn(flag.key)).toBe(true);
+            expect(featureFlags.isOn(flag.name)).toBe(true);
           });
         });
 
@@ -330,7 +332,7 @@
           });
 
           it('should report the feature as being off', function() {
-            expect(featureFlags.isOn(flag.key)).toBe(flag.environments.beta);
+            expect(featureFlags.isOn(flag.name)).toBe(flag.environments.beta);
           });
         });
       });
@@ -360,7 +362,7 @@
           });
 
           it('should report the feature as being off', function() {
-            expect(featureFlags.isOn(flag.key)).toBe(false);
+            expect(featureFlags.isOn(flag.name)).toBe(false);
           });
         });
 
@@ -370,7 +372,7 @@
           });
 
           it('should report the feature as being on', function() {
-            expect(featureFlags.isOn(flag.key)).toBe(true);
+            expect(featureFlags.isOn(flag.name)).toBe(true);
           });
         });
       });
@@ -413,6 +415,9 @@
       it('should init the flags with the ones set in the config phase', function() {
         expect(featureFlags.get()).toEqual(flags);
       });
+      
     });
+    
   });
+  */
 }(window.angular));

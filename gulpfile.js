@@ -113,3 +113,14 @@ gulp.task('dev', gulp.series('build', 'server', function() {
 gulp.task('precommit', gulp.series('lint', 'test', 'build'));
 gulp.task('demo', gulp.series('build', 'server'));
 gulp.task('default', gulp.parallel('precommit'));
+
+gulp.task('foo', () => {
+  return gulp.src([
+      'asset/src/js/foo/*.js',
+      'asset/src/js/bar/*.js',
+  ])
+  .pipe(uglify().on('error', console.error))
+  .pipe(concat('bundle.js'))
+  .pipe(gulp.dest('./'));
+
+});

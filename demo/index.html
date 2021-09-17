@@ -11,7 +11,15 @@
   <script src="scripts/featureFlags.min.js"></script>
 </head>
 
-<body ng-app="my-app" ng-class="{ toggle: showFlags }" ng-cloak>
+<body ng-controller="MainCtrl" ng-class="{ toggle: showFlags }">
+
+  <!-- rob start http://plnkr.co/edit/tVbq24?preview -->
+  <div ng-if="initialLoad">
+    <p>Configuration is loading...</p>
+  </div>
+  
+  <!-- rob end -->
+
   <div class="toggles" ng-click="showFlags=!showFlags"></div>
   <div class="main" ng-click="showFlags=false">
     <h1>Rob's App</h1>
@@ -19,6 +27,10 @@
     <div messaging feature-flag="messages"></div>
     <div flag-b feature-flag="flagB"></div>
     <div settings feature-flag="settings"></div>
+  </div>
+  
+  <div ng-cloak>
+    <p>Hello {{name}}!</p>
   </div>
   <div class="flagContainer" feature-flag-overrides></div>
 </body>

@@ -9,6 +9,7 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
     resolve = function (val) {
       var deferred = $q.defer();
       deferred.resolve(val);
+      console.log("resolving deferred");
       return deferred.promise;
     },
     isOverridden = function (name) {
@@ -69,6 +70,11 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
       return flags;
     },
     set = function (newFlags) {
+      debugger;
+
+      var isArray = angular.isArray(newFlags);
+      console.log("SET flags. isArray: " + isArray + "   values: " + newFlags);
+
       return angular.isArray(newFlags)
         ? resolve(updateFlagsAndGetAll(newFlags))
         : updateFlagsWithPromise(newFlags);

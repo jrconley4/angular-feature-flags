@@ -35,15 +35,19 @@ angular
         '<div class="panel" ng-class="{selected: selected}" ng-click="selected = !selected;">Settings</div>',
       replace: true,
     };
-  })
-  /*.run(function (featureFlags, $http) {
+  });
+/*
+  .run(function (featureFlags, $http) {
     featureFlags.setEnvironment("prod");
     featureFlags.set($http.get("../data/flags.json"));
-  });*/
+  });
+ 
   .run(function (featureFlags, $http) {
     debugger;
     featureFlags.setEnvironment("prod");
     featureFlags.set($http.get("https://localhost:5001/api/FeatureFlags/"));
     let flags = featureFlags.get();
-    console.log(flags);
+    console.log("Result from directs.js .run");
+    console.log(flags.featureFlags);
   });
+   */

@@ -1,5 +1,5 @@
 angular
-  .module("my-app")
+  .module("directives", []) //my-app
   .directive("flagA", function () {
     return {
       restrict: "A",

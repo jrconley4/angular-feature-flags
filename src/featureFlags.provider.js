@@ -17,9 +17,11 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
     },
     isOn = function (name) {
       debugger;
-      return isOverridden(name)
+      var isOn = isOverridden(name)
         ? featureFlagOverrides.get(name) === "true"
         : getCachedFlag(name);
+      console.log(name + " is on: " + isOn);
+      return isOn;
     },
     isOnByDefault = function (name) {
       return getCachedFlag(name);
@@ -45,6 +47,7 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
       );
     },
     updateFlagsAndGetAll = function (newFlags) {
+      console.log("updateFlagsAndGetAll");
       debugger;
       angular.copy(newFlags, flags);
       flags.forEach(function (flag) {
@@ -62,11 +65,13 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
       return flags;
     },
     updateFlagsWithPromise = function (promise) {
+      console.log("updateFlagsWithPromise");
       return promise.then(function (value) {
         return updateFlagsAndGetAll(value.data || value);
       });
     },
     get = function () {
+      console.log("get: " + flags);
       return flags;
     },
     set = function (newFlags) {
@@ -80,10 +85,12 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
         : updateFlagsWithPromise(newFlags);
     },
     setEnvironment = function (value) {
+      console.log("setEnvironment: " + value);
       environment = value;
       featureFlagOverrides.setEnvironment(value);
     },
     setAppName = function (value) {
+      console.log("setAppName: " + value);
       featureFlagOverrides.setAppName(value);
     },
     setInstance = function (value) {

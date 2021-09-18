@@ -4,14 +4,16 @@
 <head>
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <script src="vendor/angular.min.js"></script>
-  <script>
-    angular.module('my-app', ['feature-flags']);
-  </script>
-  <script src="scripts/directives.js"></script>
+
   <script src="scripts/featureFlags.min.js"></script>
+  <script src="scripts/directives.js"></script>
+  
+  <script>
+    angular.module('my-app', ["feature-flags"]);
+  </script>
 </head>
 
-<body ng-controller="MainCtrl" ng-class="{ toggle: showFlags }">
+<body ng-controller="MainCtrl" ng-class="{ toggle: showFlags }"> <!-- ng - app="my-app"-->
 
   <!-- rob start http://plnkr.co/edit/tVbq24?preview -->
   <div ng-if="initialLoad">
@@ -33,6 +35,35 @@
     <p>Hello {{name}}!</p>
   </div>
   <div class="flagContainer" feature-flag-overrides></div>
-</body>
 
+  <script>
+    debugger;
+    var app = angular.module("my-app", ["feature-flags"]); //["feature-flags"] heremade it work
+
+    angular.element(document).ready(function () {
+      //debugger;
+      console.log("boot");
+      var initInjector = angular.injector(["ng", "feature-flags"]); //, "feature-flags todo correct name?
+      var $http = initInjector.get("$http");
+      //var ff = initInjector.get("feature-flags"); //todo: correct name?
+
+      $http
+        .get("https://localhost:5001/api/FeatureFlags/")
+        .then(function (response) {
+          debugger;
+          app.constant("plunkerConfig", response.data);
+          console.log("boot then");
+          console.log(response.data);
+          angular.bootstrap(document, ["my-app"]); // ["feature-flags"] TODO correct name? was plunker
+
+          debugger;
+          //ff.setEnvironment("prod");
+          //ff.set(response.data);
+          //var flags = ff.get();
+          console.log("ff");
+          //console.log(flags.featureFlags);
+        });
+    });
+  </script>
+</body>
 </html>

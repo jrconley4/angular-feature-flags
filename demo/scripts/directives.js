@@ -1,6 +1,7 @@
 angular
   .module("directives", []) //my-app
   .directive("flagA", function () {
+    console.log("Flag A directive.");
     return {
       restrict: "A",
       scope: {},
@@ -10,6 +11,7 @@ angular
     };
   })
   .directive("messaging", function () {
+    console.log("messaging directive.");
     return {
       restrict: "A",
       scope: {},
@@ -19,6 +21,7 @@ angular
     };
   })
   .directive("flagB", function () {
+    console.log("Flag b directive.");
     return {
       restrict: "A",
       scope: {},
@@ -28,6 +31,7 @@ angular
     };
   })
   .directive("settings", function () {
+    console.log("settings directive.");
     return {
       restrict: "A",
       scope: {},

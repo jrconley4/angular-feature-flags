@@ -1,7 +1,7 @@
 var app = angular.module("feature-flags", []);
 
-app.controller("MainCtrl", function ($scope, plunkerConfig) {
+app.controller("MainCtrl", function ($scope, flagServerValues) {
   debugger;
   console.log("In MainCtrl");
-  $scope.name = plunkerConfig[0].flagId;
+  $scope.name = flagServerValues[0].name;
 });

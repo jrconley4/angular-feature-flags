@@ -1,57 +1,101 @@
-function FeatureFlags($q, featureFlagOverrides, initialFlags) {
+function FeatureFlags($q, featureFlagOverrides, initialFlags, envParam) {
   var serverFlagCache = {},
     flags = [],
-    environment = "",
-    instance = 0,
-    getCachedFlag = function (name) {
-      return serverFlagCache[environment] && serverFlagCache[environment][name];
-    },
-    resolve = function (val) {
+    environment = "prod"; //todo: forcing prod envParam,
+  (instance = 0),
+    (getCachedFlag = function (name) {
+      debugger;
+      var isCached =
+        serverFlagCache[environment] && serverFlagCache[environment][name];
+      console.log(
+        "getCachedFlag(" +
+          name +
+          ") = " +
+          isCached +
+          "   Environment = " +
+          environment
+      );
+      return isCached;
+    }),
+    (resolve = function (val) {
+      console.log("in resolve");
       var deferred = $q.defer();
       deferred.resolve(val);
       console.log("resolving deferred");
       return deferred.promise;
-    },
-    isOverridden = function (name) {
-      return featureFlagOverrides.isPresent(name);
-    },
-    isOn = function (name) {
+    }),
+    (isOverridden = function (name) {
+      var isOver = featureFlagOverrides.isPresent(name);
+      console.log("isOverriden(" + name + ") = " + isOver);
+      return isOver;
+    }),
+    (isOn = function (name) {
       debugger;
-      var isOn = isOverridden(name)
+      var isOnTmp = isOverridden(name)
         ? featureFlagOverrides.get(name) === "true"
         : getCachedFlag(name);
-      console.log(name + " is on: " + isOn);
-      return isOn;
-    },
-    isOnByDefault = function (name) {
-      return getCachedFlag(name);
-    },
-    isEnabledForInstance = function (instances) {
+      console.log("isOn(" + name + ") = " + isOnTmp);
+      return isOnTmp;
+    }),
+    (isOnByDefault = function (name) {
+      isDef = getCachedFlag(name);
+      console.log("isOnByDefault(" + name + ") = " + isDef);
+      return isDef;
+    }),
+    (isEnabledForInstance = function (instances) {
       if (!instances) {
+        console.log(
+          "isEnabledForInstance(" +
+            instances +
+            ") = " +
+            true +
+            " (instances is falsey)"
+        );
         return true;
       }
-      return instances.indexOf(instance) !== -1;
-    },
-    isExpired = function (expiryDate) {
+      var isFound = instances.indexOf(instance) !== -1;
+      console.log(
+        "isEnabledForInstance(" +
+          instances +
+          ") = " +
+          isFound +
+          " (instances is truthy)"
+      );
+      return isFound;
+    }),
+    (isExpired = function (expiryDate) {
       var now = new Date().toISOString();
       if (!expiryDate) {
+        console.log(
+          "isExpired(" + expiryDate + ") = false (expiryDate is falsey)"
+        );
         return false;
       }
-      return now > expiryDate;
-    },
-    isDefaultEnabled = function (environmentEnabled, flag) {
-      return (
+      var isExp = now > expiryDate;
+      console.isOnlog("isExpired(" + expiryDate + ") = " + isExp);
+      return isExp;
+    }),
+    (isDefaultEnabled = function (environmentEnabled, flag) {
+      var isEnabled =
         environmentEnabled &&
         isEnabledForInstance(flag.instances) &&
-        !isExpired(flag.expires)
+        !isExpired(flag.expires);
+
+      console.log(
+        "isEnabled(" + environmentEnabled + "," + flag + ") = " + isEnabled
       );
-    },
-    updateFlagsAndGetAll = function (newFlags) {
+      return isEnabled;
+    }),
+    (updateFlagsAndGetAll = function (newFlags) {
       console.log("updateFlagsAndGetAll");
       debugger;
       angular.copy(newFlags, flags);
       flags.forEach(function (flag) {
+        flag.environments = { prod: true };
+
+        debugger;
         angular.forEach(flag.environments, function (environmentEnabled, env) {
+          debugger;
           if (!serverFlagCache[env]) {
             serverFlagCache[env] = {};
           }
@@ -63,18 +107,18 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
         });
       });
       return flags;
-    },
-    updateFlagsWithPromise = function (promise) {
+    }),
+    (updateFlagsWithPromise = function (promise) {
       console.log("updateFlagsWithPromise");
       return promise.then(function (value) {
         return updateFlagsAndGetAll(value.data || value);
       });
-    },
-    get = function () {
+    }),
+    (get = function () {
       console.log("get: " + flags);
       return flags;
-    },
-    set = function (newFlags) {
+    }),
+    (set = function (newFlags) {
       debugger;
 
       var isArray = angular.isArray(newFlags);
@@ -83,33 +127,40 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
       return angular.isArray(newFlags)
         ? resolve(updateFlagsAndGetAll(newFlags))
         : updateFlagsWithPromise(newFlags);
-    },
-    setEnvironment = function (value) {
-      console.log("setEnvironment: " + value);
+    }),
+    (setEnvironment = function (value) {
+      console.log("setEnvironment(" + value + ")");
       environment = value;
       featureFlagOverrides.setEnvironment(value);
-    },
-    setAppName = function (value) {
-      console.log("setAppName: " + value);
+    }),
+    (setAppName = function (value) {
+      console.log("setAppName(" + value + ")");
       featureFlagOverrides.setAppName(value);
-    },
-    setInstance = function (value) {
+    }),
+    (setInstance = function (value) {
+      console.log("setInstance(" + value + ")");
       instance = value;
-    },
-    enable = function (flag) {
+    }),
+    (enable = function (flag) {
+      console.log("enable(" + flag + ")");
       featureFlagOverrides.set(flag, true);
-    },
-    disable = function (flag) {
+    }),
+    (disable = function (flag) {
+      console.log("disable(" + flag + ")");
       featureFlagOverrides.set(flag, false);
-    },
-    reset = function (flag) {
+    }),
+    (reset = function (flag) {
+      console.log("reset(" + flag + ")");
       featureFlagOverrides.remove(flag);
-    },
-    init = function () {
+    }),
+    //rrc - changed to allow inital load from constant
+    (init = function () {
+      console.log("init()");
+      debugger;
       if (initialFlags) {
         set(initialFlags);
       }
-    };
+    });
 
   init();
 
@@ -128,31 +179,44 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags) {
   };
 }
 
-angular.module("feature-flags").provider("featureFlags", function () {
-  var initialFlags = [];
-  var environment = "prod";
-  var appName = "";
+angular
+  .module("feature-flags") //todo: the code below is called first after the bootstrap
+  //the module gets loaded, then the debugger does a lot of hidden steps then this.$get is called.
+  .provider("featureFlags", function () {
+    debugger;
+    var initialFlags = [];
+    var environment = "prod";
+    var appName = "";
 
-  this.setInitialFlags = function (flags) {
-    initialFlags = flags;
-  };
+    this.setInitialFlags = function (flags) {
+      initialFlags = flags;
+    };
 
-  this.setEnvironment = function (env) {
-    environment = env;
-  };
+    this.setEnvironment = function (env) {
+      environment = env;
+    };
 
-  this.setAppName = function ($appName) {
-    appName = $appName;
-  };
+    this.setAppName = function ($appName) {
+      appName = $appName;
+    };
 
-  this.$get = function ($q, featureFlagOverrides) {
-    var service = new FeatureFlags($q, featureFlagOverrides, initialFlags);
-    if (environment) {
-      service.setEnvironment(environment);
-    }
-    if (appName) {
-      service.setAppName(appName);
-    }
-    return service;
-  };
-});
+    //note: flagServerValues are being injected here
+    this.$get = function ($q, featureFlagOverrides, flagServerValues) {
+      //todo: are values being injected here?
+      debugger;
+      var initValues = flagServerValues || featureFlagOverrides;
+      var service = new FeatureFlags(
+        $q,
+        featureFlagOverrides,
+        initValues,
+        environment
+      );
+      if (environment) {
+        service.setEnvironment(environment);
+      }
+      if (appName) {
+        service.setAppName(appName);
+      }
+      return service;
+    };
+  });

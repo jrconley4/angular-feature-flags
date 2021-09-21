@@ -4,7 +4,7 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags, envParam) {
     environment = "prod"; //todo: forcing prod envParam,
   (instance = 0),
     (getCachedFlag = function (name) {
-      debugger;
+      if (false) debugger;
       var isCached =
         serverFlagCache[environment] && serverFlagCache[environment][name];
       console.log(
@@ -30,7 +30,7 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags, envParam) {
       return isOver;
     }),
     (isOn = function (name) {
-      debugger;
+      if (false) debugger;
       var isOnTmp = isOverridden(name)
         ? featureFlagOverrides.get(name) === "true"
         : getCachedFlag(name);
@@ -88,14 +88,14 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags, envParam) {
     }),
     (updateFlagsAndGetAll = function (newFlags) {
       console.log("updateFlagsAndGetAll");
-      debugger;
+      if (false) debugger;
       angular.copy(newFlags, flags);
       flags.forEach(function (flag) {
         flag.environments = { prod: true };
 
-        debugger;
+        if (false) debugger;
         angular.forEach(flag.environments, function (environmentEnabled, env) {
-          debugger;
+          if (false) debugger;
           if (!serverFlagCache[env]) {
             serverFlagCache[env] = {};
           }
@@ -119,7 +119,7 @@ function FeatureFlags($q, featureFlagOverrides, initialFlags, envParam) {
       return flags;
     }),
     (set = function (newFlags) {
-      debugger;
+      if (false) debugger;
 
       var isArray = angular.isArray(newFlags);
       console.log("SET flags. isArray: " + isArray + "   values: " + newFlags);
@@ -183,7 +183,7 @@ angular
   .module("feature-flags") //todo: the code below is called first after the bootstrap
   //the module gets loaded, then the debugger does a lot of hidden steps then this.$get is called.
   .provider("featureFlags", function () {
-    debugger;
+    if (false) debugger;
     var initialFlags = [];
     var environment = "prod";
     var appName = "";

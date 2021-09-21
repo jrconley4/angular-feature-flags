@@ -24,11 +24,20 @@
 
   <div class="toggles" ng-click="showFlags=!showFlags"></div>
   <div class="main" ng-click="showFlags=false">
-    <h1>Rob's App. Note: initialServerFlags are not being set correctly by the time we get here.</h1>
+    <h1>Rob's App</h1>
     <div flag-a feature-flag="flagA"></div>
-    <div messaging feature-flag="messages"></div>
+    <div messaging feature-flag="messages">messages</div>
     <div flag-b feature-flag="flagB"></div>
-    <div settings feature-flag="settings"></div>
+    <div settings feature-flag="settings">Settings</div>
+    <!-- <div user-profile feature-flag="userProfile"></div>-->
+  </div>
+
+  <div>
+    <h1>ngif Example</h1>
+    <div ng-if="isOn('flagA')">flagA enabled</div>
+    <div ng-if="!isOn('flagA')">flagA disabled</div>
+    <div ng-if="isOn('flagB')">flagB enabled</div>
+    <div ng-if="!isOn('flagB')">flagB disabled</div>
   </div>
   
   <div ng-cloak>
@@ -37,11 +46,56 @@
   <div class="flagContainer" feature-flag-overrides></div>
 
   <script>
-    debugger;
+    if (false) debugger;
     var app = angular.module("my-app", ["feature-flags"]); //["feature-flags"] heremade it work
 
+    app.directive("flagA", function () {
+    if (false) debugger;
+    
+    console.log("Flag A directive.");
+    return {
+      restrict: "A",
+      scope: {},
+      template:
+        '<div class="panel" ng-class="{selected: selected}" ng-click="selected = !selected;">flagA</div>',
+      replace: true,
+    };
+  })
+  .directive("messaging", function () {
+    if (false) debugger;
+    console.log("messaging directive.");
+    return {
+      restrict: "A",
+      scope: {},
+      template:
+        '<div class="panel" ng-class="{selected: selected}" ng-click="selected = !selected;">Messaging</div>',
+      replace: true,
+    };
+  })
+  .directive("flagB", function () {
+    if (false) debugger;
+    console.log("Flag b directive.");
+    return {
+      restrict: "A",
+      scope: {},
+      template:
+        '<div class="panel" ng-class="{selected: selected}" ng-click="selected = !selected;">flagB</div>',
+      replace: true,
+    };
+  })
+  .directive("settings", function () {
+    console.log("settings directive.");
+    return {
+      restrict: "A",
+      scope: {},
+      template:
+        '<div class="panel" ng-class="{selected: selected}" ng-click="selected = !selected;">Settings</div>',
+      replace: true,
+    };
+  });
+
     angular.element(document).ready(function () {
-      //debugger;
+      //if (false) debugger;
       console.log("boot");
       var initInjector = angular.injector(["ng"]); //, "feature-flags todo correct name?
       var $http = initInjector.get("$http");
@@ -51,13 +105,13 @@
       $http
         .get("https://localhost:5001/api/FeatureFlags/")
         .then(function (response) {
-          debugger;
+          if (false) debugger;
           app.constant("flagServerValues", response.data);
           console.log("boot then");
           console.log(response.data);
           angular.bootstrap(document, ["my-app"]); // ["feature-flags"] TODO correct name? was plunker
 
-          debugger;
+          if (false) debugger;
           //ff.setEnvironment("prod");
           //ff.set(response.data);
           //var flags = ff.get();

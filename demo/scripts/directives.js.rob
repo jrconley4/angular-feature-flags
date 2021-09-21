@@ -1,6 +1,7 @@
 angular
-  .module("directives", []) //my-app
+  .module("my-app", []) //my-app
   .directive("flagA", function () {
+    if (false) debugger;
     console.log("Flag A directive.");
     return {
       restrict: "A",
@@ -11,6 +12,7 @@ angular
     };
   })
   .directive("messaging", function () {
+    if (false) debugger;
     console.log("messaging directive.");
     return {
       restrict: "A",
@@ -21,6 +23,7 @@ angular
     };
   })
   .directive("flagB", function () {
+    if (false) debugger;
     console.log("Flag b directive.");
     return {
       restrict: "A",
@@ -47,7 +50,7 @@ angular
   });
  
   .run(function (featureFlags, $http) {
-    debugger;
+    if (false) debugger;
     featureFlags.setEnvironment("prod");
     featureFlags.set($http.get("https://localhost:5001/api/FeatureFlags/"));
     let flags = featureFlags.get();
